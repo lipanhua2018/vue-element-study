@@ -1,0 +1,11 @@
+CACHE MANIFEST
+./static/css/app.css
+./static/js/manifest.js
+./static/js/vendor.js
+./static/js/app.js
+
+NETWORK:
+*
+
+FALLBACK:
+./404.html
