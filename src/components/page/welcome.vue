@@ -118,19 +118,22 @@ export default {
     },
     created () {
         let self = this;
+        console.log(this.initNotice, 121, 'welcome');
     },
+    inject: ['testStr', 'testObj'],
     mounted () {
         let self = this;
         self.$refs.pie.setPieChart();
         self.$refs.line.setLineChart();  
         const pie = findComponentDownward(this, 'pieChart');
         const upWorks = findBrothersComponents(this, 'upWorks')
-        if (pie) {
-            // console.log(pie)
-        }
-        if (upWorks.length) {
-            // console.log(upWorks)
-        }
+        console.log(this.testStr, this.testObj)
+        // if (pie) {
+        //    console.log(pie)
+        // }
+        // if (upWorks.length) {
+        //    console.log(upWorks)
+        // }
     },
     components: {
         pieChart, lineChart
@@ -143,6 +146,7 @@ export default {
             return this.$store.state.notice
         },
         initNotice () {
+            console.log('InitNotice', 149, this.$store.state.dataInfo)
             return this.$store.state.dataInfo;
         }
     },

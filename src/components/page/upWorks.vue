@@ -8,97 +8,27 @@
                 <i class="el-icon-date pos-icon"></i>
             </div>
             <el-button @click="goImglistPage()" class="upload-btn" type="primary" size="mini">上传<i class="el-icon-upload el-icon--right"></i></el-button>
+            
         </el-row>
         <el-row :gutter="10" class="tab-type">
             <el-col :span="6" v-for="(item,index) in tabTile" :key="index">
-                <div class="tab-title" :class="{curTab: cur == index}" @click="selectTab(index)">
+                <div class="tab-title" :class="{curTab: cur == index}" @click="selectTab(item)">
                     <h6>{{item.name}}</h6>
                     <div>{{item.type}}</div>
                 </div>
             </el-col>
         </el-row>
-        <el-row class="student-content" v-for="(item, index) in itObj.webArr" :key="index">
-            <el-col :span="6" class="student-list">
-                <el-checkbox class="largeClass" v-model="itObj.webArr[index].largeClass">{{itObj.webArr[index].course}}</el-checkbox>
-            </el-col>
-            <el-col :span="12" class="student-list">
-                <el-col :span="8" class="studt-type">
-                    <dl>
-                        <dt>Array</dt>
-                        <dd>push,unshift,join</dd>
-                    </dl>
-                    <dl>
-                        <dt>String</dt>
-                        <dd>
-                            indexOf,splice
-                        </dd>
-                    </dl>
-                </el-col>
-                <el-col :span="8" class="studt-type">
-                    <dl>
-                        <dt>Math</dt>
-                        <dd>round,ceil,floor</dd>
-                    </dl>
-                    <dl>
-                        <dt>Date</dt>
-                        <dd>
-                            getDay,getMonth
-                        </dd>
-                    </dl>
-                </el-col>
-                <el-col :span="8" class="studt-type">
-                    <dl>
-                        <dt>RegExp</dt>
-                        <dd>exec,test</dd>
-                    </dl>
-                    <dl>
-                        <dt>Function</dt>
-                        <dd>
-                            eval,parseFloat
-                        </dd>
-                    </dl>
-                </el-col>
-            </el-col>
-            <el-col :span="6" class="student-list last-term">
-                <div>
-                    <span class="lab-span">老师：</span>
-                    <el-select size="mini" v-model="taecher" placeholder="请选择">
-                        <el-option
-                        v-for="item in selectType.taecher"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-                <div>
-                    <span class="lab-span">课时：</span>
-                    <el-select size="mini" v-model="hour" placeholder="请选择">
-                        <el-option
-                        v-for="item in selectType.classHour"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-                <div>
-                    <span class="lab-span">类型：</span>
-                    <el-select size="mini" v-model="course" placeholder="请选择">
-                        <el-option
-                        v-for="item in selectType.courseType"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-            </el-col>
-        </el-row>
+        <!-- <web-component :itObj="itObj" :selectType="selectType"></web-component> -->
+        <!-- 动态组件实战应用,使用vue内置组件component 使用is属性接收一个组件名字 -->
+        <component v-bind:is="currentComponent" :itObj="itObj" :selectType="selectType"></component>
     </div>
 </template>
 
 <script>
+import webComponent from '../up-work-component/web-component';
+import designComponent from '../up-work-component/design-component';
+import networkComponent from '../up-work-component/network-component';
+import serverComponent from '../up-work-component/sever-component';
 export default {
     name: 'upWorks',
     data () {
@@ -108,22 +38,31 @@ export default {
             date: '',
             activeName: 'web',
             cur: 0,
+            currentComponent: 'webComponent',
             tabTile: [
                 {
                     name: 'web前端',
-                    type: 'js/vue/angular'
+                    type: 'js/vue/angular',
+                    index: 0,
+                    componnetName: 'webComponent'
                 },
                 {
                     name: 'server后台',
-                    type: 'c/java/python'
+                    type: 'c/java/python',
+                    index: 1,
+                    componnetName: 'serverComponent'
                 },
                 {
                     name: 'network网络',
-                    type: 'http/WebServices'
+                    type: 'http/WebServices',
+                    index: 2,
+                    componnetName: 'networkComponent'
                 },
                 {
                     name: 'Design设计',
-                    type: 'ui/ue/ux'
+                    type: 'ui/ue/ux',
+                    index: 3,
+                    componnetName: 'designComponent'
                 }
             ],
             taecher: '',
@@ -156,7 +95,10 @@ export default {
         self.getDataInfo()
     },
     components: {
-
+        webComponent,
+        designComponent,
+        networkComponent,
+        serverComponent
     },
     computed: {
 
@@ -182,8 +124,9 @@ export default {
         handleClick (tab, event) {
             console.log(tab, event);
         },
-        selectTab (index) {
-            this.cur = index;
+        selectTab (item) {
+            this.cur = item.index;
+            this.currentComponent = item.componnetName; // 动态组件切换
         },
         pinkDate () {
             let dom = this.$refs.pinkDate;
@@ -210,6 +153,7 @@ export default {
 
 <style scoped lang="scss">
 .up-area{
+    position: relative;
     .date-box{
         display: inline-block;
         position: relative;
@@ -231,6 +175,11 @@ export default {
             color: #67c23a;
             font-size: 14px;
         }
+    }
+    .upload-img{
+        position: absolute;
+        right: 100px;
+        top: 0;
     }
     .upload-btn{
         float: right;
@@ -261,50 +210,5 @@ export default {
         }
     }
 }
-.student-content{
-    border-bottom: 1px solid #ddd;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    .student-list{
-        height: 100px;
-        margin: 20px 0;
-        border-left: 1px solid #ddd;
-        .largeClass{
-            height: 100px;
-            line-height: 100px;
-            margin-left: 15px;
-        }
-        .studt-type{
-            padding: 0 10px;
-            dl{
-                margin-bottom: 10px;
-                dt{
-                    color: #999;
-                    font-size: 12px;
-                    padding-bottom: 6px;
-                }
-                dd{
-                    word-wrap:break-word;
-                    font-size: 14px;
-                    color: #333;
-                }
-            }           
-        }
-        .lab-span{
-            display: inline-block;
-            width: 40px;
-            text-align: right;
-            margin-left: 10px;
-        }
-    }
-    .last-term{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        // align-content:space-between;
-    }
-}
-.student-list:nth-child(1){
-    border-left: none;
-}
+
 </style>

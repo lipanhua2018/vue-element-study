@@ -51,6 +51,15 @@ export default {
             week: ''
         }
     },
+    provide: {
+        testStr: '测试provide字符串',
+        testObj: {
+            type: 'Object',
+            name: 'provide',
+            count: 100,
+            bool: true
+        }
+    },
     created () {
         this.getDateFn();
     },
@@ -75,6 +84,7 @@ export default {
     },
     computed: {
         dataInfo () {
+            console.log('HOME: dataInfo')
             return this.$store.state.dataInfo;
         },
         navList () {
