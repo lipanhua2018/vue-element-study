@@ -29,6 +29,7 @@ import webComponent from '../up-work-component/web-component';
 import designComponent from '../up-work-component/design-component';
 import networkComponent from '../up-work-component/network-component';
 import serverComponent from '../up-work-component/sever-component';
+import {findComponentDownward} from '../../common/findComponentDownward.js';
 export default {
     name: 'upWorks',
     data () {
@@ -65,9 +66,6 @@ export default {
                     componnetName: 'designComponent'
                 }
             ],
-            taecher: '',
-            hour: '',
-            course: '',
             selectType: {
                 taecher: [{label:'黄老师', value: 'yellow'}, {label:'红老师', value: 'red'}, {label:'蓝老师', value: 'blue'}],
                 classHour: [{label:'一小时', value: 'one'}, {label:'二小时', value: 'two'}, {label:'三小时', value: 'three'}],
@@ -75,12 +73,17 @@ export default {
             },
             itObj:{
                 webArr: [
-                    {course: 'javaScript', largeClass: true},
-                    {course: 'ECMAScript6', largeClass: false},
-                    {course: 'react', largeClass: false},
-                    {course: 'vue', largeClass: false},
-                    {course: 'angular6', largeClass: false}
-                ]
+                    {course: 'javaScript', largeClass: true, taecher: '', hour: '', type: '',},
+                    {course: 'ECMAScript6', largeClass: false, taecher: '', hour: '', type: '',},
+                    {course: 'react', largeClass: false, taecher: '', hour: '', type: '',},
+                    {course: 'vue', largeClass: false, taecher: '', hour: '', type: '',},
+                    {course: 'angular6', largeClass: false, taecher: '', hour: '', type: '',}
+                ],
+                personRole: {
+                    taecher: '',
+                    hour: '',
+                    course: '',
+                }
             }
         }
     },
@@ -93,6 +96,9 @@ export default {
             self.pinkDate();
         },50)
         self.getDataInfo()
+
+        let child = findComponentDownward(this, 'sever-component')
+        // console.log(self, 98, child)
     },
     components: {
         webComponent,
@@ -109,20 +115,6 @@ export default {
                 content: '我是自定义的全局弹窗',
                 duration: 3
             });
-            this.$myAlert.info({
-                content: '我是自定义的全局弹窗1',
-                duration: 3
-            });
-            this.$myAlert.info({
-                content: '我是自定义的全局弹窗2',
-                duration: 3
-            });
-        },
-        findMe () {
-            console.log('找到了我')
-        },
-        handleClick (tab, event) {
-            console.log(tab, event);
         },
         selectTab (item) {
             this.cur = item.index;
@@ -137,7 +129,7 @@ export default {
         },
         getDataInfo () {
             this.$store.dispatch('getDataInfo').then(res => {
-                console.log(res)
+                // console.log(res)
             })
         },
         goImglistPage () {           

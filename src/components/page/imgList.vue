@@ -89,7 +89,9 @@
                         <span>{{item.num}}</span>
                         <span>{{item.animal}}</span>
                     </li>
-                </ul>               
+                </ul>
+                <input type="file" name="file" @change="onupimg" />
+                <img class="img-style" :src="base64" v-if="showimg" />         
             </div>
         </div>
     </div>
@@ -107,6 +109,8 @@ export default {
         return {
             name: 'imgList',
             pageName: '图片列表页',
+            showimg: false,
+            base64: '',
             imgList: [
                 {
                     name: '功夫熊猫one',
@@ -176,6 +180,21 @@ export default {
         }
     },
     methods: {
+        onupimg (event) {
+            let formdata = new FormData();
+            let self = this;
+            let file = event.target.files[0];
+            let readr = new FileReader();   // 实例化file对象
+            readr.onload = function () {
+                console.log('1', readr, formdata)
+                self.showimg = true;
+                self.base64 = readr.result;
+            }
+            if (file) {
+                readr.readAsDataURL(file);  // 将file选择的图片转base64;
+            }
+            console.log(event, file)
+        },
         handleExamine (index, row) {
             console.log(index, row)
         },
@@ -221,6 +240,10 @@ justify-content: space-between;
 
 .box {
     width: 33%;
+    .img-style{
+        width: 250px;
+        height: 150px;
+    }
 }
 .img-list-box{
     li{

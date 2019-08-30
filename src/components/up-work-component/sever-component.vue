@@ -1,6 +1,6 @@
 <template>
     <div class="sever-component">
-            就是几个字，这个是sever模块
+            {{tipStr}}
     </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
     name: 'sever-component',
     data () {
         return {
-
+            tipStr: '就是几个字，这个是sever模块'
         }
     },
 

@@ -2,7 +2,7 @@
     <div class="web-component">
         <el-row class="student-content" v-for="(item, index) in itObj.webArr" :key="index">
             <el-col :span="6" class="student-list">
-                <el-checkbox class="largeClass" v-model="itObj.webArr[index].largeClass">{{itObj.webArr[index].course}}</el-checkbox>
+                <el-checkbox class="largeClass" v-model="item.largeClass">{{item.course}}</el-checkbox>
             </el-col>
             <el-col :span="12" class="student-list">
                 <el-col :span="8" class="studt-type">
@@ -45,7 +45,7 @@
             <el-col :span="6" class="student-list last-term">
                 <div>
                     <span class="lab-span">老师：</span>
-                    <el-select size="mini" v-model="taecher" placeholder="请选择">
+                    <el-select size="mini" v-model="item.taecher" placeholder="请选择">
                         <el-option
                         v-for="item in selectType.taecher"
                         :key="item.value"
@@ -56,7 +56,7 @@
                 </div>
                 <div>
                     <span class="lab-span">课时：</span>
-                    <el-select size="mini" v-model="hour" placeholder="请选择">
+                    <el-select size="mini" v-model="item.hour" placeholder="请选择">
                         <el-option
                         v-for="item in selectType.classHour"
                         :key="item.value"
@@ -67,7 +67,7 @@
                 </div>
                 <div>
                     <span class="lab-span">类型：</span>
-                    <el-select size="mini" v-model="course" placeholder="请选择">
+                    <el-select size="mini" v-model="item.type" placeholder="请选择">
                         <el-option
                         v-for="item in selectType.courseType"
                         :key="item.value"
@@ -82,7 +82,9 @@
 </template>
 
 <script>
+import { findBrothersComponents, findComponentUpward } from '../../common/findComponentDownward';
 export default {
+    name: 'web-component',
     data () {
         return {
 
@@ -93,7 +95,8 @@ export default {
             type: Object,
             default: function () {
                 return {
-                    webArr: []
+                    webArr: [],
+                    personRole: {}
                 }
             }
         },
@@ -109,12 +112,18 @@ export default {
         }
     },
     created () {},
-    mounted () {},
+    mounted () {
+        
+        let brother = findBrothersComponents(this, 'sever-component');
+        let parent = findComponentUpward(this, 'home')
+        // console.log(this, '93', brother, parent)
+    },
     methods: {},
     watch: {
         itObj: {
             handler: function (val, oldVal) {
                 console.log("oldVal:", oldVal)
+                console.log("val:", val);
              },
             deep: true
         }
